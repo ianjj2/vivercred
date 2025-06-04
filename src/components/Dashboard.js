@@ -60,9 +60,9 @@ const Dashboard = () => {
 
   // Ordena por valor decrescente
   const sorted = [...salesData].sort((a, b) => Number(b.valor) - Number(a.valor));
-  // Divide em duas colunas
-  const left = sorted.slice(0, 10);
-  const right = sorted.slice(10, 20);
+  // Divide em duas colunas de 5
+  const left = sorted.slice(0, 5);
+  const right = sorted.slice(5, 10);
 
   // Função para renderizar colaborador com animação
   function renderColaborador(v, idx, pos) {
@@ -131,15 +131,15 @@ const Dashboard = () => {
         <img src="/logo.png" alt="Logo" style={{ maxWidth: 180, display: 'block', margin: '0 auto' }} />
       </Box>
       <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mb: 0, letterSpacing: 2, textShadow: '2px 2px 8px #000' }} align="center">
-        TOP 20 Diário
+        TOP 10 Diário
       </Typography>
       <Typography variant="subtitle1" sx={{ color: '#aaa', mb: 4, textShadow: '1px 1px 4px #000', fontSize: 32, fontWeight: 700 }} align="center">
         Última atualização: {formatDate(lastUpdate)}
       </Typography>
       <Paper sx={{
         width: { xs: '98vw', sm: '95vw', md: '90vw', lg: '80vw', xl: '70vw' },
-        maxWidth: 1800,
-        minWidth: 600,
+        maxWidth: 1200,
+        minWidth: 400,
         background: '#232a36',
         borderRadius: 3,
         boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)',
@@ -153,7 +153,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, mb: 2, letterSpacing: 1 }}>Colaborador</Typography>
-            {right.map((v, idx) => renderColaborador(v, idx, idx + 11))}
+            {right.map((v, idx) => renderColaborador(v, idx, idx + 6))}
           </Grid>
         </Grid>
       </Paper>
