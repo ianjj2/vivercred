@@ -2,28 +2,6 @@ import { supabase } from './supabaseClient';
 
 const TABLE_NAME = 'vendedoras';
 
-export const subscribeToVendedoras = (callback) => {
-  // Real-time subscription
-  const channel = supabase
-    .channel('vendedoras-changes')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: TABLE_NAME },
-      (payload) => {
-        fetchVendedoras().then(callback);
-      }
-    )
-    .subscribe();
-
-  // Initial fetch
-  fetchVendedoras().then(callback);
-
-  // Return unsubscribe function
-  return () => {
-    supabase.removeChannel(channel);
-  };
-};
-
 export const fetchVendedoras = async () => {
   const { data, error } = await supabase
     .from(TABLE_NAME)

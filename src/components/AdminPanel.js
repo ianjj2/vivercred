@@ -16,7 +16,7 @@ import {
   Alert,
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { subscribeToVendedoras, addVendedora, updateVendedora, deleteVendedora } from '../services/vendedorasService';
+import { fetchVendedoras, addVendedora, updateVendedora, deleteVendedora } from '../services/vendedorasService';
 
 const AdminPanel = () => {
   const [vendedoras, setVendedoras] = useState([]);
@@ -25,11 +25,19 @@ const AdminPanel = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
-    const unsubscribe = subscribeToVendedoras((vendedoras) => {
+    let interval;
+    let isMounted = true;
+    const fetchAndUpdate = async () => {
+      const vendedoras = await fetchVendedoras();
+      if (!isMounted) return;
       setVendedoras(vendedoras);
-    });
-
-    return () => unsubscribe();
+    };
+    fetchAndUpdate();
+    interval = setInterval(fetchAndUpdate, 5000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const handleAddVendedora = async () => {

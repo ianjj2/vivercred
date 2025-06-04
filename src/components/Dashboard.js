@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Paper, Grid, Fade } from '@mui/material';
-import { subscribeToVendedoras } from '../services/vendedorasService';
+import { fetchVendedoras } from '../services/vendedorasService';
 
 function formatDate(date) {
   if (!date) return '';
@@ -19,7 +19,10 @@ const Dashboard = () => {
   const prevData = useRef([]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToVendedoras((vendedoras) => {
+    let interval;
+    let isMounted = true;
+    const fetchAndUpdate = async () => {
+      const vendedoras = await fetchVendedoras();
       // Detecta aumentos de valor
       const newHighlights = {};
       vendedoras.forEach((v) => {
@@ -28,6 +31,7 @@ const Dashboard = () => {
           newHighlights[v.id] = { diff: Number(v.valor) - Number(prev.valor) };
         }
       });
+      if (!isMounted) return;
       setSalesData(vendedoras);
       setLastUpdate(Date.now());
       // Ativa animação
@@ -45,8 +49,13 @@ const Dashboard = () => {
         });
       }
       prevData.current = vendedoras.map((v) => ({ ...v }));
-    });
-    return () => unsubscribe();
+    };
+    fetchAndUpdate();
+    interval = setInterval(fetchAndUpdate, 5000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   // Ordena por valor decrescente
