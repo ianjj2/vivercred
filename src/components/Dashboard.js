@@ -58,24 +58,29 @@ const Dashboard = () => {
     };
   }, []);
 
-  // Ordena por valor decrescente
-  const sorted = [...salesData].sort((a, b) => Number(b.valor) - Number(a.valor));
+  // Lista de nomes fictícios para preencher o ranking
+  const nomesFicticios = [
+    'COLABORADOR 1', 'COLABORADOR 2', 'COLABORADOR 3', 'COLABORADOR 4', 'COLABORADOR 5',
+    'COLABORADOR 6', 'COLABORADOR 7', 'COLABORADOR 8', 'COLABORADOR 9', 'COLABORADOR 10'
+  ];
+  // Preencher até 10 posições
+  const preenchido = Array.from({ length: 10 }, (_, i) => salesData[i] || { id: `fake${i}`, nome: nomesFicticios[i], valor: 0 });
   // Divide em duas colunas de 5
-  const left = sorted.slice(0, 5);
-  const right = sorted.slice(5, 10);
+  const left = preenchido.slice(0, 5);
+  const right = preenchido.slice(5, 10);
 
   // Função para renderizar colaborador com animação
   function renderColaborador(v, idx, pos) {
     const highlight = highlights[v.id];
     return (
       <Box key={v.id} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Typography sx={{ color: '#00bfff', fontWeight: 900, fontSize: 28, width: 40, textAlign: 'right', mr: 2 }}>{pos}º</Typography>
+        <Typography sx={{ color: '#00bfff', fontWeight: 900, fontSize: 36, width: 50, textAlign: 'right', mr: 2 }}>{pos}º</Typography>
         <Box sx={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
           <Typography
             sx={{
               color: highlight ? '#00ff99' : '#fff',
-              fontWeight: 700,
-              fontSize: 22,
+              fontWeight: 900,
+              fontSize: 32,
               textShadow: highlight
                 ? '0 0 16px #00ff99, 0 0 8px #fff'
                 : '1px 1px 4px #000',
@@ -92,7 +97,7 @@ const Dashboard = () => {
                 ml: 2,
                 color: '#00ff99',
                 fontWeight: 900,
-                fontSize: 20,
+                fontSize: 24,
                 textShadow: '0 0 8px #00ff99',
                 animation: highlight ? 'pulse 1.2s infinite alternate' : 'none',
               }}
@@ -101,7 +106,7 @@ const Dashboard = () => {
             </Box>
           </Fade>
         </Box>
-        <Typography sx={{ color: '#ffd700', fontWeight: 900, fontSize: 22, minWidth: 160, textAlign: 'right', ml: 2 }}>
+        <Typography sx={{ color: '#ffd700', fontWeight: 900, fontSize: 28, minWidth: 160, textAlign: 'right', ml: 2 }}>
           R$ {Number(v.valor).toLocaleString('pt-BR')}
         </Typography>
       </Box>
@@ -137,9 +142,10 @@ const Dashboard = () => {
         Última atualização: {formatDate(lastUpdate)}
       </Typography>
       <Paper sx={{
-        width: { xs: '98vw', sm: '95vw', md: '90vw', lg: '80vw', xl: '70vw' },
-        maxWidth: 1200,
-        minWidth: 400,
+        width: { xs: '99vw', sm: '98vw', md: '96vw', lg: '90vw', xl: '85vw' },
+        maxWidth: 2000,
+        minWidth: 700,
+        minHeight: 0,
         background: '#232a36',
         borderRadius: 3,
         boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)',
