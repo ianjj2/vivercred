@@ -133,7 +133,7 @@ const Dashboard = () => {
       <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mb: 0, letterSpacing: 2, textShadow: '2px 2px 8px #000' }} align="center">
         TOP 20 Diário
       </Typography>
-      <Typography variant="subtitle1" sx={{ color: '#aaa', mb: 4, textShadow: '1px 1px 4px #000' }} align="center">
+      <Typography variant="subtitle1" sx={{ color: '#aaa', mb: 4, textShadow: '1px 1px 4px #000', fontSize: 32, fontWeight: 700 }} align="center">
         Última atualização: {formatDate(lastUpdate)}
       </Typography>
       <Paper sx={{
