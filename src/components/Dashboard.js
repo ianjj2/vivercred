@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Inicializar o áudio
-    audioRef.current = new Audio('/cash.mp3');
+    audioRef.current = new Audio('./cash.mp3');
     audioRef.current.volume = 1.0; // volume máximo permitido
     console.log('Áudio inicializado com volume:', audioRef.current.volume);
     // Verificar se o áudio foi carregado corretamente
