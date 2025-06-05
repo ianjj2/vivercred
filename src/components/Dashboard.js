@@ -33,6 +33,8 @@ const Dashboard = () => {
     audioRef.current.addEventListener('error', (e) => {
       console.error('Erro ao carregar áudio:', e);
     });
+    // Pré-carregar o áudio
+    audioRef.current.load();
   }, []);
 
   useEffect(() => {
