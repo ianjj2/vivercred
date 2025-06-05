@@ -23,6 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     // Inicializar o áudio
     audioRef.current = new Audio('/cash.mp3');
+    audioRef.current.volume = 1.0; // volume máximo
   }, []);
 
   useEffect(() => {
