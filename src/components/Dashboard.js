@@ -17,8 +17,6 @@ const Dashboard = () => {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [highlights, setHighlights] = useState({}); // { id: { diff: number, timeout: NodeJS.Timeout } }
   const prevData = useRef([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [lastHighlights, setLastHighlights] = useState({});
   const audioRef = useRef(null);
 
