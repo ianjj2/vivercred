@@ -26,6 +26,13 @@ const Dashboard = () => {
     audioRef.current = new Audio('/cash.mp3');
     audioRef.current.volume = 1.0; // volume máximo permitido
     console.log('Áudio inicializado com volume:', audioRef.current.volume);
+    // Verificar se o áudio foi carregado corretamente
+    audioRef.current.addEventListener('canplaythrough', () => {
+      console.log('Áudio carregado e pronto para tocar');
+    });
+    audioRef.current.addEventListener('error', (e) => {
+      console.error('Erro ao carregar áudio:', e);
+    });
   }, []);
 
   useEffect(() => {
