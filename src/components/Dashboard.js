@@ -12,6 +12,11 @@ function formatDate(date) {
 
 const ANIMATION_DURATION = 3500; // ms
 
+const getMonthYear = (dateStr) => {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-${d.getMonth() + 1}`;
+};
+
 const Dashboard = () => {
   const [salesData, setSalesData] = useState([]);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -20,6 +25,7 @@ const Dashboard = () => {
   const [lastHighlights, setLastHighlights] = useState({});
   const audioRef = useRef(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [screen, setScreen] = useState('diario'); // 'diario' ou 'mensal'
 
   useEffect(() => {
     // Inicializar o áudio
@@ -93,11 +99,26 @@ const Dashboard = () => {
     'COLABORADOR 1', 'COLABORADOR 2', 'COLABORADOR 3', 'COLABORADOR 4', 'COLABORADOR 5',
     'COLABORADOR 6', 'COLABORADOR 7', 'COLABORADOR 8', 'COLABORADOR 9', 'COLABORADOR 10'
   ];
-  // Preencher até 10 posições
-  const preenchido = Array.from({ length: 10 }, (_, i) => salesData[i] || { id: `fake${i}`, nome: nomesFicticios[i], valor: 0 });
-  // Divide em duas colunas de 5
-  const left = preenchido.slice(0, 5);
-  const right = preenchido.slice(5, 10);
+  // Ranking Diário
+  const preenchidoDiario = Array.from({ length: 10 }, (_, i) => salesData[i] || { id: `fake${i}`, nome: nomesFicticios[i], valor: 0 });
+  const leftDiario = preenchidoDiario.slice(0, 5);
+  const rightDiario = preenchidoDiario.slice(5, 10);
+
+  // Ranking Mensal (agora usa o campo valor_mensal do banco)
+  const mensalArr = [...salesData]
+    .map(v => ({ ...v, valor: Number(v.valor_mensal) || 0 }))
+    .sort((a, b) => b.valor - a.valor);
+  const preenchidoMensal = Array.from({ length: 10 }, (_, i) => mensalArr[i] || { id: `fake${i}`, nome: nomesFicticios[i], valor: 0 });
+  const leftMensal = preenchidoMensal.slice(0, 5);
+  const rightMensal = preenchidoMensal.slice(5, 10);
+
+  // Alternar entre as telas a cada 2 minutos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setScreen((prev) => (prev === 'diario' ? 'mensal' : 'diario'));
+    }, 120000); // 2 minutos
+    return () => clearInterval(interval);
+  }, []);
 
   // Função para renderizar colaborador com animação
   function renderColaborador(v, idx, pos) {
@@ -187,7 +208,7 @@ const Dashboard = () => {
       <Box sx={{ mb: 4, mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: 180, display: 'block', margin: '0 auto', filter: 'drop-shadow(0 0 16px #ff8000)' }} />
         <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mt: 3, mb: 1, letterSpacing: 2, textShadow: '2px 2px 8px #000', fontSize: 54 }} align="center">
-          TOP 10 Diário
+          {screen === 'diario' ? 'TOP 10 Diário' : 'TOP 10 Mensal'}
         </Typography>
       </Box>
       <Box sx={{ position: 'absolute', top: 24, right: 32, zIndex: 10 }}>
@@ -209,11 +230,11 @@ const Dashboard = () => {
         <Grid container spacing={6}>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, mb: 2, letterSpacing: 1 }}>Colaborador</Typography>
-            {left.map((v, idx) => renderColaborador(v, idx, idx + 1))}
+            {(screen === 'diario' ? leftDiario : leftMensal).map((v, idx) => renderColaborador(v, idx, idx + 1))}
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, mb: 2, letterSpacing: 1 }}>Colaborador</Typography>
-            {right.map((v, idx) => renderColaborador(v, idx, idx + 6))}
+            {(screen === 'diario' ? rightDiario : rightMensal).map((v, idx) => renderColaborador(v, idx, idx + 6))}
           </Grid>
         </Grid>
       </Paper>
