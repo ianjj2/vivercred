@@ -19,23 +19,25 @@ const Dashboard = () => {
   const prevData = useRef([]);
   const [lastHighlights, setLastHighlights] = useState({});
   const audioRef = useRef(null);
+  const [audioEnabled, setAudioEnabled] = useState(false);
 
   useEffect(() => {
     // Inicializar o áudio
     audioRef.current = new Audio('/cash.mp3');
-    audioRef.current.volume = 1.0; // volume máximo
+    audioRef.current.volume = 1.0; // volume máximo permitido
+    console.log('Áudio inicializado com volume:', audioRef.current.volume);
   }, []);
 
   useEffect(() => {
     // Verificar se há novas atualizações em highlights
     const hasNewUpdates = Object.keys(highlights).some(id => !lastHighlights[id]);
-    if (hasNewUpdates) {
+    if (hasNewUpdates && audioEnabled) {
       console.log('Nova atualização detectada, tocando som...');
       audioRef.current.currentTime = 0; // Reiniciar o áudio
       audioRef.current.play().catch(e => console.error('Erro ao tocar áudio:', e));
     }
     setLastHighlights(highlights);
-  }, [highlights, lastHighlights]);
+  }, [highlights, lastHighlights, audioEnabled]);
 
   useEffect(() => {
     let interval;
@@ -133,18 +135,40 @@ const Dashboard = () => {
   }
 
   return (
-    <Box sx={{
-      minHeight: '100vh',
-      minWidth: '100vw',
-      bgcolor: '#181c24',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      p: 0,
-      m: 0,
-      overflow: 'hidden',
-    }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 3,
+        position: 'relative',
+      }}
+      onClick={() => setAudioEnabled(true)} // Ativar áudio ao clicar na tela
+    >
+      {!audioEnabled && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0,0,0,0.7)',
+            zIndex: 1000,
+            cursor: 'pointer',
+          }}
+        >
+          <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900, letterSpacing: 2, textShadow: '2px 2px 8px #000' }}>
+            Clique para ativar o som
+          </Typography>
+        </Box>
+      )}
       <style>{`
         @keyframes pulse {
           0% { transform: scale(1); opacity: 1; }
