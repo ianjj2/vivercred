@@ -29,6 +29,8 @@ const Dashboard = () => {
     // Verificar se há novas atualizações em highlights
     const hasNewUpdates = Object.keys(highlights).some(id => !lastHighlights[id]);
     if (hasNewUpdates) {
+      console.log('Nova atualização detectada, tocando som...');
+      audioRef.current.currentTime = 0; // Reiniciar o áudio
       audioRef.current.play().catch(e => console.error('Erro ao tocar áudio:', e));
     }
     setLastHighlights(highlights);
