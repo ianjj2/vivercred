@@ -17,6 +17,24 @@ const Dashboard = () => {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [highlights, setHighlights] = useState({}); // { id: { diff: number, timeout: NodeJS.Timeout } }
   const prevData = useRef([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [lastHighlights, setLastHighlights] = useState({});
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    // Inicializar o áudio
+    audioRef.current = new Audio('/cash.mp3');
+  }, []);
+
+  useEffect(() => {
+    // Verificar se há novas atualizações em highlights
+    const hasNewUpdates = Object.keys(highlights).some(id => !lastHighlights[id]);
+    if (hasNewUpdates) {
+      audioRef.current.play().catch(e => console.error('Erro ao tocar áudio:', e));
+    }
+    setLastHighlights(highlights);
+  }, [highlights, lastHighlights]);
 
   useEffect(() => {
     let interval;
