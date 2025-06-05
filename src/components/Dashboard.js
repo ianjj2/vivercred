@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Inicializar o áudio
-    audioRef.current = new Audio('./cash.mp3');
+    audioRef.current = new Audio('/cash.mp3');
     audioRef.current.volume = 1.0; // volume máximo permitido
     console.log('Áudio inicializado com volume:', audioRef.current.volume);
     // Verificar se o áudio foi carregado corretamente
@@ -184,25 +184,27 @@ const Dashboard = () => {
           100% { transform: scale(1.15); opacity: 0.7; }
         }
       `}</style>
-      <Box sx={{ mb: 2 }}>
-        <img src="/logo.png" alt="Logo" style={{ maxWidth: 180, display: 'block', margin: '0 auto' }} />
+      <Box sx={{ mb: 4, mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <img src="/logo.png" alt="Logo" style={{ maxWidth: 180, display: 'block', margin: '0 auto', filter: 'drop-shadow(0 0 16px #ff8000)' }} />
+        <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mt: 3, mb: 1, letterSpacing: 2, textShadow: '2px 2px 8px #000', fontSize: 54 }} align="center">
+          TOP 10 Diário
+        </Typography>
       </Box>
-      <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mb: 0, letterSpacing: 2, textShadow: '2px 2px 8px #000' }} align="center">
-        TOP 10 Diário
-      </Typography>
-      <Typography variant="subtitle1" sx={{ color: '#aaa', mb: 4, textShadow: '1px 1px 4px #000', fontSize: 32, fontWeight: 700 }} align="center">
-        Última atualização: {formatDate(lastUpdate)}
-      </Typography>
+      <Box sx={{ position: 'absolute', top: 24, right: 32, zIndex: 10 }}>
+        <Typography variant="subtitle1" sx={{ color: '#aaa', textShadow: '1px 1px 4px #000', fontSize: 32, fontWeight: 700 }}>
+          Última atualização: {formatDate(lastUpdate)}
+        </Typography>
+      </Box>
       <Paper sx={{
         width: { xs: '99vw', sm: '98vw', md: '96vw', lg: '90vw', xl: '85vw' },
         maxWidth: 2000,
         minWidth: 700,
-        minHeight: 0,
         background: '#232a36',
-        borderRadius: 3,
-        boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)',
-        p: { xs: 2, sm: 4, md: 6 },
+        borderRadius: 5,
+        boxShadow: '0 12px 48px 0 rgba(0,0,0,0.35)',
+        p: { xs: 4, sm: 6, md: 8 },
         m: 0,
+        mt: 2,
       }}>
         <Grid container spacing={6}>
           <Grid item xs={12} md={6}>
