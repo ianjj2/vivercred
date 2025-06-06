@@ -111,7 +111,7 @@
     useEffect(() => {
       const interval = setInterval(() => {
         setScreen((prev) => (prev === 'diario' ? 'mensal' : 'diario'));
-      }, 120000); // 2 minutos
+      }, 50000); // 2 minutos
       return () => clearInterval(interval);
     }, []);
 
